@@ -1,0 +1,53 @@
+version: '3.8'
+
+volumes:
+  minio-data: {}
+
+networks:
+  default-network:
+    driver: bridge
+
+services:
+
+  media-service:
+    container_name: media-service
+    depends_on:
+      media-service-minio:
+        condition: service_healthy
+    build:
+      dockerfile: Dockerfile
+    environment:
+      - GRPC_HOST=0.0.0.0
+      - GRPC_PORT=2020
+      - LOG_LVL=info
+      - MINIO_HOST=media-service-minio
+      - MINIO_PORT=9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MINIO_POST_BUCKET_NAME=post
+    ports:
+      - "2020:2020"
+    networks:
+      - default-network
+
+  media-service-minio:
+    container_name: media-service-minio
+    image: quay.io/minio/minio:RELEASE.2022-02-18T01-50-10Z
+    healthcheck:
+      test: [ 'CMD-SHELL', 'curl -I http://localhost:9000/minio/health/live' ]
+      interval: 5s
+      timeout: 5s
+      start_period: 5s
+    volumes:
+      - ./minio-data:/data
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      MINIO_ROOT_USER: 'minio_user'
+      MINIO_ROOT_PASSWORD: 'minio_password'
+      MINIO_ADDRESS: ':9000'
+      MINIO_CONSOLE_ADDRESS: ':9001'
+    command: minio server /data
+    networks:
+      - default-network

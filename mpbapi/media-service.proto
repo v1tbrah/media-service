@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package mpbapi;
+
+option go_package = "media-service/mpbapi";
+
+service MediaService {
+  rpc AddPost(AddPostRequest) returns (AddPostResponse) {}
+  rpc GetPost(GetPostRequest) returns (GetPostResponse) {}
+}
+
+message AddPostRequest {
+  bytes data = 1;
+}
+
+message AddPostResponse {
+  string guid = 1;
+}
+
+message GetPostRequest {
+  string guid = 1;
+}
+
+message GetPostResponse {
+  bytes data = 1;
+}
