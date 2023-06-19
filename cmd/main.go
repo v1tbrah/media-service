@@ -34,7 +34,7 @@ func main() {
 		log.Info().Msg("storage initialized")
 	}
 
-	newAPI := api.New(newStorage)
+	newAPI := api.New(newConfig.HTTP, newStorage)
 
 	shutdownSig := make(chan os.Signal, 1)
 	signal.Notify(shutdownSig, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
@@ -61,11 +61,11 @@ func main() {
 	defer cancel()
 
 	if err = newAPI.GracefulStop(ctxClose); err != nil {
-		log.Error().Err(err).Msg("gRPC server graceful stop")
+		log.Error().Err(err).Msg("gRPC and HTTP server graceful stop")
 		if err == context.DeadlineExceeded {
 			return
 		}
 	} else {
-		log.Info().Msg("gRPC server gracefully stopped")
+		log.Info().Msg("gRPC and HTTP server gracefully stopped")
 	}
 }

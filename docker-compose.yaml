@@ -19,6 +19,8 @@ services:
     environment:
       - GRPC_HOST=0.0.0.0
       - GRPC_PORT=2020
+      - HTTP_HOST=0.0.0.0
+      - HTTP_PORT=2929
       - LOG_LVL=info
       - MINIO_HOST=media-service-minio
       - MINIO_PORT=9000
@@ -27,6 +29,7 @@ services:
       - MINIO_POST_BUCKET_NAME=post
     ports:
       - "2020:2020"
+      - "2929:2929"
     networks:
       - default-network
 
