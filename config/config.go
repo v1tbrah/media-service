@@ -14,6 +14,7 @@ const (
 
 type Config struct {
 	GRPC   GRPC
+	HTTP   HTTP
 	Minio  Minio
 	LogLvl zerolog.Level
 }
@@ -21,6 +22,7 @@ type Config struct {
 func NewDefaultConfig() Config {
 	return Config{
 		GRPC:   newDefaultGRPCConfig(),
+		HTTP:   newDefaultHTTPConfig(),
 		Minio:  newDefaultMinioConfig(),
 		LogLvl: defaultLogLvl,
 	}
@@ -28,6 +30,8 @@ func NewDefaultConfig() Config {
 
 func (c *Config) ParseEnv() error {
 	c.GRPC.parseEnv()
+
+	c.HTTP.parseEnv()
 
 	c.Minio.parseEnv()
 

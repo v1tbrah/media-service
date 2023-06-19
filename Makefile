@@ -15,8 +15,7 @@ mockgen:
 	go install github.com/vektra/mockery/v2@v2.24.0
 	go generate ./...
 
-# TODO
-#push_to_dockerhub:
-#	docker build -t v1tbrah/relation-service:v1 .
-#	docker tag v1tbrah/relation-service:v1 v1tbrah/relation-service:v1-release
-#	docker push v1tbrah/relation-service:v1-release
+push_to_dockerhub:
+	docker build -t v1tbrah/media-service:v1 .
+	docker tag v1tbrah/media-service:v1 v1tbrah/media-service:v1-release
+	docker push v1tbrah/media-service:v1-release
